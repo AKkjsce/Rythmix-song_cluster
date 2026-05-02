@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env/
+
+# Data and Outputs (to avoid large GitHub pushes)
+data/*.csv
+# We need to keep the clustered tracks in source control for Vercel
+# outputs/*.csv
+!data/sample*.csv
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rythmix</title>
+    <!-- using montserrat because it looks clean and spotify uses it too -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- left sidebar, sort of like spotify has -->
+    <nav class="sidebar">
+        <h1 class="logo">Rythmix</h1>
+        <p class="tagline">Explore music by sound, not genre</p>
+        <ul class="nav-links">
+            <li class="active" id="nav-charts">Insights</li>
+            <li id="nav-search">Explore</li>
+        </ul>
+    </nav>
+
+    <!-- everything on the right side -->
+    <main class="main-view">
+
+        <!-- page 1: charts and graphs -->
+        <section id="view-charts" class="view-section active">
+            <header class="section-header">
+                <div class="header-text">
+                    <h2>Sound Pattern Insights</h2>
+                    <p>
+                        Rythmix analyzes audio features like - energy, tempo and mood - to automatically organize tracks into distinct sound profiles, focusing entirely on how the music feels rather than genre labels.
+                    </p>
+                </div>
+            </header>
+
+            <div class="chart-grid">
+
+                <!-- the big scatter plot at the top -->
+                <div class="chart-card large-chart">
+                    <h3>Sound Space Map</h3>
+                    <p>
+                        Each point represents a song. The model initially analyzes multiple audio features,
+                        but since those can't be visualized directly, PCA reduces them to two dimensions.
+                        Songs with similar sound characteristics appear closer together on the plot.
+                    </p>
+                    <img src="/outputs/pca_scatter.png" alt="Cluster scatter plot">
+                </div>
+
+                <!-- the spider/radar chart - one per cluster -->
+                <div class="chart-card">
+                    <h3>Vibe Signatures</h3>
+                    <p>
+                        Each radar chart summarizes the average audio features of a cluster. Peaks in 
+                        attributes such as energy indicate high-intensity tracks, whereas higher 
+                        acousticness values correspond to more stripped-down and mellow songs.
+                    </p>
+                    <img src="/outputs/radar_chart.png" alt="Radar chart per cluster">
+                </div>
+
+                <!-- BIC/AIC chart -->
+                <div class="chart-card">
+                    <h3>Cluster Selection using Model Criteria</h3>
+                    <p>We didn't rely on guesswork — a Gaussian Mixture Model was used to evaluate different cluster counts (K = 6 to 15), scoring each configuration to identify the most suitable one.</p>
+                    <ul class="k-explanation">
+                        <li>
+                            <strong>BIC Score (red line):</strong> Bayesian Information Criterion. It applies a penalty for increasing model complexity, meaning that lower scores represent a more optimal trade-off between fit and the number of clusters.
+                        </li>
+                        <li>
+                            <strong>AIC Score (blue dashed line):</strong> Akaike Information Criterion. Like BIC, it evaluates model fit while penalizing complexity, though less strictly. A lower score reflects a more suitable model.
+                        </li>
+                        <li>
+                            <strong>Orange dotted line:</strong> The point representing the optimal cluster count, where the model best balances goodness of fit with model complexity.
+                        </li>
+                    </ul>
+                    <img src="/outputs/bic_aic_chart.png" alt="K selection chart" onerror="this.style.display='none'">
+                </div>
+
+            </div>
+        </section>
+
+        <!-- page 2: song search + cluster browser -->
+        <section id="view-search" class="view-section hidden">
+            <header class="section-header">
+                <div class="header-text">
+                    <h2>Discover Songs</h2>
+                    <p>Search for any track or artist to explore similar songs based on shared acoustic characteristics.</p>
+                </div>
+            </header>
+
+            <!-- tab strip: Search vs Browse by Cluster -->
+            <div class="discover-tabs">
+                <button class="tab-btn active" id="tab-search-btn">Search Tracks</button>
+
+                <!-- Browse by Cluster pill doubles as a dropdown -->
+                <div class="tab-cluster-wrapper" id="tab-cluster-wrapper">
+                    <button class="tab-btn" id="tab-cluster-btn">
+                        Browse by Vibe <span class="tab-arrow">&#9660;</span>
+                    </button>
+                    <!-- dropdown list gets injected here by JS -->
+                    <div class="cluster-dropdown-menu hidden" id="cluster-dropdown-menu"></div>
+                </div>
+            </div>
+
+            <!-- shared search input -->
+            <div class="search-container">
+                <input type="text" id="search-box" placeholder="Search for a song, artist, or mood...">
+            </div>
+
+            <!-- search panel (global results) -->
+            <div id="panel-search">
+                <div class="results-container" id="results-area"></div>
+            </div>
+
+            <!-- cluster results panel -->
+            <div id="panel-cluster" class="hidden">
+                <div class="results-container" id="cluster-results-area">
+                    <div class="empty-state">Use dropdown above to pick a cluster</div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+</div>
+
+<script src="/static/main.js"></script>
+</body>
+</html>
