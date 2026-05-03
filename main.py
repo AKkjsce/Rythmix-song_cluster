@@ -10,7 +10,7 @@ from src.analyse    import generate_analysis
 
 
 def get_args():
-    p = argparse.ArgumentParser(description="spoopify - acoustic clustering for spotify tracks")
+    p = argparse.ArgumentParser(description="rythmix - acoustic clustering for spotify tracks")
     p.add_argument("--data", default="data/dataset.csv", help="path to csv")
     p.add_argument("--k", type=int, default=None, help="fix cluster count, skips search")
     p.add_argument("--sample", type=int, default=None, help="subsample size for k search")
@@ -21,7 +21,7 @@ def main():
     args = get_args()
     t0 = time.perf_counter()
 
-    print("\nspoopify starting up...")
+    print("\nrythmix starting up...")
 
     tracks = load_and_clean(args.data)
     feats, info = pick_features(tracks)
